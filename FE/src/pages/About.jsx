@@ -14,7 +14,7 @@ const About = () => {
             <div className="my-10 flex flex-col md:flex-row gap-16">
                 <img className="w-full md:max-w-[480px]" src={assets.aboutus} alt="" />
                 <div className="flex flex-col justify-center gap-6 md:w-2/4 text-gray-600">
-                    <p>At Forever Beauty, we believe that beauty knows no borders. Our platform was created to bring the finest international cosmetic brands directly to you, combining luxury, innovation, and care in every product.</p>
+                    <p>At HNT Comestics, we believe that beauty knows no borders. Our platform was created to bring the finest international cosmetic brands directly to you, combining luxury, innovation, and care in every product.</p>
                     <p>We proudly curate an exclusive collection of makeup, skincare, fragrance, and personal care products from globally renowned brands. Our commitment is to deliver authenticity, quality, and excellence—so you can shop with complete confidence.</p>
                     <b className="text-gray-800">Our Mission</b>
                     <p>Our mission at Forever Beauty is to inspire confidence and celebrate individuality. We are dedicated to providing premium beauty solutions tailored to every skin type, every style, and every dream.</p>
