@@ -1,60 +1,73 @@
 import React, { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
 import axios from 'axios'
 import { backendUrl, currency } from '../App'
 import { toast } from 'react-toastify'
 
-const List = ({token}) => {
-
+const List = ({ token }) => {
   const [list, setList] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
   const fetchList = async () => {
-    try{
-
+    try {
       const response = await axios.get(backendUrl + "/api/product/list");
-      if(response.data.products) {
+      if (response.data.products) {
         setList(response.data.products);
+      } else {
+        toast.error("No products found");
       }
-      else {
-        toast.error(response.data.products)
-      }
-
-    } catch (error){
+    } catch (error) {
       console.log(error);
-      toast.error(error.message)
+      toast.error(error.message);
     }
-  }
+  };
 
   const removeProduct = async (id) => {
-    try{
-
-      const response = await axios.post(backendUrl + "/api/product/remove", {id}, {header:{token}})
+    try {
+      const response = await axios.post(
+        backendUrl + "/api/product/remove",
+        { id },
+        { headers: { token } } // Sửa lại 'header' thành 'headers'
+      );
 
       if (response.data.success) {
         toast.success(response.data.message);
         await fetchList();
-      }
-      else {
+      } else {
         toast.error(response.data.message);
       }
-
     } catch (error) {
       console.log(error);
-      toast.error(error.message)
+      toast.error(error.message);
     }
-  }
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchList();
-  },[])
+  }, []);
+
+  const filteredList = list.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.category.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
-      <p className='mb-2'>All Products List</p>  
+      <p className='mb-2 text-xl font-bold'>All Products List</p>
+
+      {/* Search bar */}
+      <input
+        type="text"
+        placeholder="Search by name or category..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="border p-2 mb-4 w-full md:w-1/2 rounded"
+      />
+
       <div className='flex flex-col gap-2'>
-        {/* List Table Title */}
 
-        <div className="hidden md:grid grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center py-1 px-2 border bg-gray-100 text-sm">
-
+        {/* Header Row */}
+        <div className="hidden md:grid grid-cols-[1fr_3fr_1fr_1fr_2fr] items-center py-1 px-2 border bg-gray-100 text-sm font-semibold">
           <b>Image</b>
           <b>Name</b>
           <b>Category</b>
@@ -63,21 +76,38 @@ const List = ({token}) => {
         </div>
 
         {/* Product List */}
-        {
-          list.map((item, index)=>(
-            <div className='grid grid-cols-[1fr_3fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center gaps-2 py-1 px-2 border text-sm' key={index}>
-              <img className='w-12' src={item.image[0]} alt=''/>
-              <p>{item.name}</p>
-              <p>{item.category}</p>
-              <p>{currency}{item.price}</p>
-              <p onClick={()=>removeProduct(item._id)} className='text-right md:text-center cursor-pointer text-lg'>X</p>
+        {filteredList.map((item, index) => (
+          <div
+            className='grid grid-cols-[1fr_3fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_2fr] items-center gap-2 py-1 px-2 border text-sm'
+            key={index}
+          >
+            <img className='w-12' src={item.images[0]} alt='' />
+            <p>{item.name}</p>
+            <p>{item.category}</p>
+            <p>{currency}{item.price}</p>
+            <div className="flex justify-end md:justify-center gap-2 text-sm">
+              <button
+                className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
+                View
+              </button>
+              <button
+                className="px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => removeProduct(item._id)}
+                className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+              >
+                Delete
+              </button>
             </div>
-          ))
-        }
+          </div>
+        ))}
       </div>
     </div>
   )
 }
 
 export default List
-//9:11

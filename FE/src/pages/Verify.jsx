@@ -18,7 +18,7 @@ const Verify = () => {
                 return null
             }
 
-            const response = await axios.post(backendUrl+'/api/order/verifyStripe', {success,orderId}, {headers:{token}})
+            const response = await axios.post(backendUrl + '/api/order/verifyStripe', { success, orderId }, { headers: { token } })
 
             if (response.data.success) {
                 setCartItems({})
@@ -30,19 +30,19 @@ const Verify = () => {
         } catch (error) {
             console.log(error);
             toast.error(error.message)
-            
+
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         verifyPayment()
-    },[token])
+    }, [token])
 
-  return (
-    <div>
-      
-    </div>
-  )
+    return (
+        <div>
+
+        </div>
+    )
 }
 
 export default Verify

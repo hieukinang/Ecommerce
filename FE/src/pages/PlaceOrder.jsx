@@ -22,7 +22,7 @@
 //     phone: ''
 //   });
 
- 
+
 
 //   const onChangeHandle = (event) => {
 //     const name = event.target.name;
@@ -31,7 +31,7 @@
 //     setFormData(data => ({...data, [name]:value}))
 //   //   setFormData(data => {
 //   //     const updatedData = {...data, [name]: value};
-      
+
 //   //     // Lưu vào localStorage
 //   //     localStorage.setItem('orderFormData', JSON.stringify(updatedData));
 
@@ -43,7 +43,7 @@
 //   // const onSubmitHandle = async (event) => {
 //   //   event.preventDefault();
 //   //   try {
-      
+
 //   //     let orderItems = []
 
 //   //     for(const items in cartItems){
@@ -58,7 +58,7 @@
 //   //         }
 //   //       }
 //   //     }
-      
+
 //   //     let orderData = {
 //   //       address: formData,
 //   //       items: orderItems,
@@ -86,7 +86,7 @@
 //   //     }
 
 //   //   } catch (error) {
-      
+
 //   //   }
 //   // } 
 
@@ -127,13 +127,13 @@
 //             toast.error(response.data.message)
 //           }
 //           break;
-      
+
 //         default:
 //           break;
 //       }
 
 //     } catch (error) {
-      
+
 //     }
 //   }
 
@@ -210,13 +210,13 @@ const PlaceOrder = () => {
   const [method, setMethod] = useState('cod');
   const { navigate, backendUrl, token, cartItems, setCartItems, getCartAmount, delivery_fee, products } = useContext(ShopContext);
   const [formData, setFormData] = useState({
-    firstName: '', 
-    lastName: '', 
-    email: '', 
-    street: '', 
-    city: '', 
-    state: '', 
-    zipcode: '', 
+    firstName: '',
+    lastName: '',
+    email: '',
+    street: '',
+    city: '',
+    state: '',
+    zipcode: '',
     country: '',
     phone: ''
   });
@@ -231,13 +231,13 @@ const PlaceOrder = () => {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
       amount: order.amount,
       currency: order.currency,
-      name:'Order Payment',
+      name: 'Order Payment',
       description: 'Order Payment',
       order_id: order.id,
       receipt: order.receipt,
       handler: async (response) => {
         console.log(response);
-        
+
       }
     }
     const rzp = new window.Razorpay(options)
@@ -249,14 +249,11 @@ const PlaceOrder = () => {
     try {
       let orderItems = [];
       for (const itemId in cartItems) {
-        for (const size in cartItems[itemId]) {
-          if (cartItems[itemId][size] > 0) {
-            const itemInfo = { ...products.find((p) => p._id === itemId) };
-            if (itemInfo) {
-              itemInfo.size = size;
-              itemInfo.quantity = cartItems[itemId][size];
-              orderItems.push(itemInfo);
-            }
+        if (cartItems[itemId] > 0) {
+          const itemInfo = { ...products.find((p) => p._id === itemId) };
+          if (itemInfo) {
+            itemInfo.quantity = cartItems[itemId];  // Sử dụng số lượng trực tiếp từ cartItems
+            orderItems.push(itemInfo);
           }
         }
       }
@@ -271,7 +268,7 @@ const PlaceOrder = () => {
 
         // API Calls for COD
         case 'cod':
-          const response = await axios.post(backendUrl + '/api/order/place', orderData, {headers:{token}})
+          const response = await axios.post(backendUrl + '/api/order/place', orderData, { headers: { token } })
           if (response.data.success) {
             setCartItems({})
             navigate('/orders')
@@ -285,9 +282,9 @@ const PlaceOrder = () => {
             ...orderData,
             origin: window.location.origin,
           };
-          const responseStripe = await axios.post(backendUrl + '/api/order/stripe',  orderDataWithOrigin, {headers:{token}})
+          const responseStripe = await axios.post(backendUrl + '/api/order/stripe', orderDataWithOrigin, { headers: { token } })
           if (responseStripe.data.success) {
-            const {session_url} = responseStripe.data
+            const { session_url } = responseStripe.data
             window.location.replace(session_url)
           } else {
             toast.error(responseStripe.data.message)
@@ -304,24 +301,24 @@ const PlaceOrder = () => {
         //   break;
 
         case 'vnpay':
-          const responseVnpay = await axios.post(backendUrl+ '/api/order/vnpay', orderData, {headers:{token}})
+          const responseVnpay = await axios.post(backendUrl + '/api/order/vnpay', orderData, { headers: { token } })
           if (responseVnpay.data.success) {
             // Backend sẽ trả về URL chuyển hướng đến trang thanh toán VNPAY
             window.location.replace(responseVnpay.data.paymentUrl);
-            
+
           } else {
             toast.error(responseVnpay.data.message);
           }
           break;
 
         default:
-           break;
-              }
+          break;
+      }
 
       // const response = await axios.post(`${backendUrl}/api/order/place`, orderData, { headers: { token } });
       // const responseStripe = await axios.post(backendUrl + '/api/order/stripe', orderData, {headers:{token}});
-      
-      
+
+
       // if (response.data.success || responseStripe.data.success) {
       //   setCartItems({});
       //   navigate('/orders');
@@ -358,13 +355,13 @@ const PlaceOrder = () => {
         <CartTotal />
         <Title text1='PAYMENT' text2='METHOD' />
         <div className='flex gap-3 flex-col lg:flex-row'>
-          <div onClick={()=>setMethod('stripe')} className='flex items-center gap-3 border p-2 px-3 cursor-pointer'>
-            <p className={`min-w-3 h-3.5 border rounded-full ${method === 'stripe' ? 'bg-green-400' : ''}` }></p>
-            <img className='h-5 mx-4' src={assets.stripe_logo} alt=''/>
+          <div onClick={() => setMethod('stripe')} className='flex items-center gap-3 border p-2 px-3 cursor-pointer'>
+            <p className={`min-w-3 h-3.5 border rounded-full ${method === 'stripe' ? 'bg-green-400' : ''}`}></p>
+            <img className='h-5 mx-4' src={assets.stripe_logo} alt='' />
           </div>
-          <div onClick={()=>setMethod('vnpay')} className='flex items-center gap-3 border p-2 px-3 cursor-pointer'>
+          <div onClick={() => setMethod('vnpay')} className='flex items-center gap-3 border p-2 px-3 cursor-pointer'>
             <p className={`min-w-3 h-3.5 border rounded-full ${method === 'vnpay' ? 'bg-green-400' : ''}`}></p>
-            <img className='h-5 mx-4' src={assets.razorpay_logo} alt=''/>
+            <img className='h-5 mx-4' src={assets.razorpay_logo} alt='' />
           </div>
           <div onClick={() => setMethod('cod')} className='flex items-center gap-3 border p-2 px-3 cursor-pointer'>
             <p className={`min-w-3 h-3.5 border rounded-full ${method === 'cod' ? 'bg-green-400' : ''}`}></p>

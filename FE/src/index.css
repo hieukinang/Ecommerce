@@ -4,11 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
-a.active hr{
+a.active hr {
     display: block;
 }
 
-*{
+* {
     font-family: Outfit;
 }
 
@@ -18,14 +18,13 @@ a.active hr{
     font-style: normal;
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
     display: none;
 }
 
-@media (max-width: 640px){
-    a.active{
+@media (max-width: 640px) {
+    a.active {
         background-color: black;
         color: white;
     }
 }
-  
