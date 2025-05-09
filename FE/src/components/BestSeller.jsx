@@ -20,7 +20,7 @@ const BestSeller = () => {
           BEST SELLERS_____
         </h2>
         <p className="mt-4 text-gray-500 text-xs sm:text-sm md:text-base w-full sm:w-2/3 mx-auto leading-relaxed">
-          Discover our most loved beauty essentials, handpicked by our customers worldwide. 
+          Discover our most loved beauty essentials, handpicked by our customers worldwide.
           Bring home the best in skincare, makeup, and fragrance.
         </p>
       </div>
@@ -32,7 +32,7 @@ const BestSeller = () => {
             key={index}
             id={item._id}
             name={item.name}
-            image={item.image}
+            images={item.images}
             price={item.price}
           />
         ))}
