@@ -19,32 +19,21 @@ const ShopContextProvider = (props) => {
     const [token, setToken] = useState('');
     const navigate = useNavigate();
 
-    const addToCart = async (itemId, size) => {
+    const addToCart = async (itemId, brand) => {
 
 
 
         let cartData = structuredClone(cartItems);
-        if (cartData[itemId]) {
-            if (cartData[itemId]) {
-                cartData[itemId] += 1;
-            }
-            else {
-                cartData[itemId] = 1;
-            }
-        }
-        else {
-            cartData[itemId] = {};
-            cartData[itemId] = 1;
-        }
+
+        cartData[itemId] = (cartData[itemId] || 0) + 1;
 
         setCartItems(cartData);
         console.log(cartData);
 
         if (token) {
             try {
-                toast.success("Add to cart successfully")
-                await axios.post(backendUrl + "/api/cart/add", { itemId }, { headers: { token } })
-
+                toast.success("Add to cart successfully");
+                await axios.post(`${backendUrl}/api/cart/add`, { itemId }, { headers: { token } });
             } catch (error) {
                 console.log(error);
                 toast.error(error.message);
@@ -54,19 +43,19 @@ const ShopContextProvider = (props) => {
 
     const getCartCount = () => {
         let total = 0;
-        for (const items in cartItems) {
-            for (const item in cartItems[items]) {
-                try {
-                    if (cartItems[items][item] > 0) {
-                        total += cartItems[items][item];
-                    }
-                } catch (error) {
 
+        for (const itemId in cartItems) {
+            try {
+                if (cartItems[itemId] > 0) {
+                    total += cartItems[itemId]; // Chỉ cần cộng trực tiếp số lượng
                 }
+            } catch (error) {
+                console.error("Error calculating total count:", error);
             }
         }
+
         return total;
-    }
+    };
 
     const getProductsData = async () => {
         try {
@@ -85,16 +74,16 @@ const ShopContextProvider = (props) => {
 
 
 
-    const updateQuantity = async (itemId, size, quantity) => {
+    const updateQuantity = async (itemId, quantity) => {
         let cartData = structuredClone(cartItems);
 
-        cartData[itemId][size] = quantity;
+        cartData[itemId] = quantity;
 
         setCartItems(cartData);
 
         if (token) {
             try {
-                await axios.post(backendUrl + '/api/cart/update', { itemId, size, quantity }, { headers: { token } });
+                await axios.post(backendUrl + '/api/cart/update', { itemId, quantity }, { headers: { token } });
             } catch (error) {
                 console.log(error);
                 toast.error(error.message);
@@ -104,21 +93,23 @@ const ShopContextProvider = (props) => {
 
     const getCartAmount = () => {
         let totalAmount = 0;
-        for (const items in cartItems) {
-            let itemInfo = products.find((product) => product._id === items);
-            for (const item in cartItems[items]) {
-                try {
-                    if (cartItems[items][item] > 0) {
-                        totalAmount += itemInfo.price * cartItems[items][item]
-                    }
-                } catch (error) {
 
+        for (const itemId in cartItems) {
+            let itemInfo = products.find((product) => product._id === itemId);
+
+            if (!itemInfo) continue; // Bỏ qua nếu không tìm thấy sản phẩm
+
+            try {
+                if (cartItems[itemId] > 0) {
+                    totalAmount += itemInfo.price * cartItems[itemId];
                 }
+            } catch (error) {
+                console.error("Error calculating total amount:", error);
             }
         }
-        return totalAmount;
-    }
 
+        return totalAmount;
+    };
     const getUserCart = async (token) => {
         try {
             const response = await axios.post(backendUrl + '/api/cart/get', {}, { headers: { token } });
