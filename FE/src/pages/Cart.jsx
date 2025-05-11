@@ -22,6 +22,13 @@ const Cart = () => {
       setCartData(tempData);
     }
   }, [cartItems, products]);
+  if (!cartData.length || !products.length) {
+    return (
+      <div className='text-center py-10 text-gray-600 text-lg'>
+        Giỏ hàng của bạn đang trống hoặc dữ liệu sản phẩm chưa sẵn sàng.
+      </div>
+    );
+  }
 
   return (
     <div className='border-t pt-14'>
@@ -30,6 +37,7 @@ const Cart = () => {
       </div>
 
       <div>
+
         {cartData.map((item, index) => {
           const productData = products.find((product) => product._id === item._id);
           if (!productData) return null;
@@ -40,7 +48,7 @@ const Cart = () => {
               className='py-4 border-t border-b text-gray-700 grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-4'
             >
               <div className='flex items-start gap-6'>
-                <img className='w-16 sm:w-20' src={productData.image[0]} alt='' />
+                <img className='w-16 sm:w-20' src={productData.images[0]} alt='' />
                 <div>
                   <p className='text-xs sm:text-lg font-medium'>{productData.name}</p>
                   <div className='flex items-center gap-5 mt-2'>
