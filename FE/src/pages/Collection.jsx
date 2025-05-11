@@ -9,9 +9,11 @@ const Collection = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [filterProducts, setFilterProducts] = useState([]);
   const [category, setCategory] = useState([]);
-  const [subCategory, setSubCategory] = useState([]);
+  const [brand, setBrand] = useState([]);
   const [sortType, setSortType] = useState('relavent')
   const [suggestedProducts, setSuggestedProducts] = useState([])
+  const [priceRange, setPriceRange] = useState([]);
+
 
   const toggleCategory = (e) => {
     if (category.includes(e.target.value)) {
@@ -22,14 +24,23 @@ const Collection = () => {
     }
   }
 
-  const toggleSubCategory = (e) => {
-    if (subCategory.includes(e.target.value)) {
-      setSubCategory(prev => prev.filter(item => item !== e.target.value))
+  const toggleBrand = (e) => {
+    if (brand.includes(e.target.value)) {
+      setBrand(prev => prev.filter(item => item !== e.target.value));
+    } else {
+      setBrand(prev => [...prev, e.target.value]);
     }
-    else {
-      setSubCategory(prev => [...prev, e.target.value])
+  };
+
+  const togglePriceRange = (e) => {
+    const value = e.target.value;
+    if (priceRange.includes(value)) {
+      setPriceRange(prev => prev.filter(item => item !== value));
+    } else {
+      setPriceRange(prev => [...prev, value]);
     }
-  }
+  };
+  
 
   const applyFilter = () => {
     let productsCopy = products.slice()
@@ -42,9 +53,26 @@ const Collection = () => {
       productsCopy = productsCopy.filter(item => category.includes(item.category));
     }
 
-    if (subCategory.length > 0) {
-      productsCopy = productsCopy.filter(item => subCategory.includes(item.subCategory))
+    if (brand.length > 0) {
+      productsCopy = productsCopy.filter(item => brand.includes(item.brand));
     }
+
+    if (priceRange.length > 0) {
+      productsCopy = productsCopy.filter(item => {
+        return priceRange.some(range => {
+          const price = item.price;
+          if (range === 'Under 5 USD') return price < 5;
+          if (range === '5 USD - 30 USD') return price >= 5 && price < 30;
+          if (range === '30 USD - 70 USD') return price >= 30 && price < 70;
+          if (range === '70 USD - 100 USD') return price >= 70 && price < 100;
+          if (range === '100 USD - 150 USD') return price >= 100 && price < 150;
+          if (range === '150 USD - 200 USD') return price >= 150 && price < 200;
+          if (range === 'Above 200 USD') return price > 200;
+          return true;
+        });
+      });
+    }
+    
 
     setFilterProducts(productsCopy)
   }
@@ -68,7 +96,13 @@ const Collection = () => {
 
   useEffect(() => {
     applyFilter()
-  }, [category, subCategory, search, showSearch, products])
+  }, [category, brand, priceRange, search, showSearch, products])
+  
+  
+//   useEffect(() => {
+//   console.log("🔍 Danh sách sản phẩm:", products);
+// }, [products]);
+
 
   useEffect(() => {
     sortProduct();
@@ -89,7 +123,7 @@ const Collection = () => {
           <p className='mb-3 text-sm font-medium'>PRODUCT CATEGORIES</p>
           <div className='flex flex-col gap-2 text-sm font-light text-gray-700'>
             <p className='flex gap-2'>
-              <input className='w-3' type='checkbox' value={'Lipstick'} onChange={toggleCategory} />Lipstick
+              <input className='w-3' type='checkbox' value={'Lifstick'} onChange={toggleCategory} />Lipstick
             </p>
 
             <p className='flex gap-2'>
@@ -101,7 +135,7 @@ const Collection = () => {
             </p>
 
             <p className='flex gap-2'>
-              <input className='w-3' type='checkbox' value={'Skincare-Haircare'} onChange={toggleCategory} />Skincare - Haircare
+              <input className='w-3' type='checkbox' value={'Skincare - Haircare'} onChange={toggleCategory} />Skincare - Haircare
             </p>
           </div>
         </div>
@@ -127,7 +161,7 @@ const Collection = () => {
                   className='w-3'
                   type='checkbox'
                   value={brand}
-                  onChange={toggleSubCategory}
+                  onChange={toggleBrand}
                 />
                 {brand}
               </p>
@@ -143,19 +177,20 @@ const Collection = () => {
           <p className='mb-3 text-sm font-medium'>PRICE RANGE</p>
           <div className='flex flex-col gap-2 text-sm font-light text-gray-700'>
             {[
-              'Under 4.35 USD',
-              '4.35 USD - 8.70 USD',
-              '8.70 USD - 13.04 USD',
-              '13.04 USD - 21.74 USD',
-              '21.74 USD - 43.48 USD',
-              'Above 43.48 USD',
+              'Under 5 USD',
+              '5 USD - 30 USD',
+              '30 USD - 70 USD',
+              '70 USD - 100 USD',
+              '100 USD - 150 USD',
+              '150 USD - 200 USD',
+              'Above 200 USD',
             ].map((range, index) => (
               <p key={index} className='flex gap-2'>
                 <input
                   className='w-3'
                   type='checkbox'
                   value={range}
-                  onChange={toggleSubCategory}
+                  onChange={togglePriceRange}
                 />
                 {range}
               </p>
