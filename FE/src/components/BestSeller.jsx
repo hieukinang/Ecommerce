@@ -10,7 +10,11 @@ const BestSeller = () => {
 
   useEffect(() => {
     const bestProduct = products.filter(item => item.bestseller)
-    setBestSeller(bestProduct)
+
+    // Xáo trộn mảng sản phẩm bestseller
+    const shuffled = [...bestProduct].sort(() => Math.random() - 0.5)
+
+    setBestSeller(shuffled)
   }, [products])
 
   const handleNext = () => {
@@ -39,23 +43,21 @@ const BestSeller = () => {
       </div>
 
       <div className="relative px-12">
-      <button
-        onClick={handlePrev}
-        disabled={startIndex === 0}
-        className="absolute -left-6 top-1/2 transform -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 disabled:opacity-30 flex items-center justify-center shadow-md transition duration-200"
-      >
-        ←
-      </button>
+        <button
+          onClick={handlePrev}
+          disabled={startIndex === 0}
+          className="absolute -left-6 top-1/2 transform -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 disabled:opacity-30 flex items-center justify-center shadow-md transition duration-200"
+        >
+          ←
+        </button>
 
-      <button
-        onClick={handleNext}
-        disabled={startIndex + visibleCount >= bestSeller.length}
-        className="absolute -right-6 top-1/2 transform -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 disabled:opacity-30 flex items-center justify-center shadow-md transition duration-200"
-      >
-        →
-      </button>
-
-
+        <button
+          onClick={handleNext}
+          disabled={startIndex + visibleCount >= bestSeller.length}
+          className="absolute -right-6 top-1/2 transform -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 disabled:opacity-30 flex items-center justify-center shadow-md transition duration-200"
+        >
+          →
+        </button>
 
         {/* Danh sách sản phẩm */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
