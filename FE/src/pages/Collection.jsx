@@ -233,7 +233,7 @@ const Collection = () => {
         </div>
 
         {/*Map products */}
-        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6'>
+        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-2'>
           {currentProducts.map((item, index) => (
             <div key={index} className="border-r border-gray-300 last:border-r-0">
               <ProductItem
