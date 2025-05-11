@@ -9,17 +9,19 @@ const ProductItem = ({ id, images, name, price }) => {
   const displayImage = Object.values(images || {})[0] || 'fallback.jpg';
 
   return (
-    <div>
-      <Link className='text-gray-700 cursor-pointer' to={`/product/${id}`}>
-        <div className='overflow-hidden'>
+    <div className='flex flex-col p-3 border rounded shadow-sm hover:shadow-md transition-all h-full'>
+      <Link className='text-gray-700 cursor-pointer flex flex-col h-full' to={`/product/${id}`}>
+        <div className='h-[180px] flex items-center justify-center overflow-hidden'>
           <img
-            className='hover:scale-110 transition ease-in-out'
+            className='max-h-full object-contain hover:scale-110 transition ease-in-out duration-300'
             src={displayImage}
             alt={name || 'product image'}
           />
         </div>
-        <p className='pt-3 pb-1 text-sm'>{name}</p>
-        <p className='text-sm font-medium'>{currency}{price}</p>
+        <div className='flex flex-col justify-between flex-1 mt-3'>
+          <p className='text-sm font-medium min-h-[40px]'>{name}</p>
+          <p className='text-sm font-semibold'>{currency}{price}</p>
+        </div>
       </Link>
     </div>
   )
