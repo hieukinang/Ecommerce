@@ -13,6 +13,8 @@ const Collection = () => {
   const [sortType, setSortType] = useState('relavent')
   const [suggestedProducts, setSuggestedProducts] = useState([])
   const [priceRange, setPriceRange] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 20;
 
 
   const toggleCategory = (e) => {
@@ -107,6 +109,25 @@ const Collection = () => {
   useEffect(() => {
     sortProduct();
   }, [sortType])
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filterProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(filterProducts.length / productsPerPage);
+  // Tính khoảng hiển thị cho pagination
+  const visiblePageCount = 5;
+  let startPage = Math.max(currentPage - Math.floor(visiblePageCount / 2), 1);
+  let endPage = startPage + visiblePageCount - 1;
+
+  if (endPage > totalPages) {
+    endPage = totalPages;
+    startPage = Math.max(endPage - visiblePageCount + 1, 1);
+  }  
+
+  const pageNumbers = [];
+  for (let i = startPage; i <= endPage; i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <div className='flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t'>
@@ -213,12 +234,52 @@ const Collection = () => {
 
         {/*Map products */}
         <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap gay-y-6'>
-          {
-            filterProducts.map((item, index) => (
-              <ProductItem key={index} name={item.name} id={item._id} price={item.price} images={item.images} />
-            ))
-          }
+          {currentProducts.map((item, index) => (
+            <ProductItem key={index} name={item.name} id={item._id} price={item.price} images={item.images} />
+          ))}
         </div>
+          
+        <div className="flex justify-center items-center mt-8 space-x-2 text-sm">
+          {/* Previous button */}
+          <button
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            className="px-3 py-1 border rounded hover:bg-gray-100 transition disabled:opacity-50"
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+
+          {/* Page numbers */}
+          {pageNumbers.map((number) => (
+            <button
+              key={number}
+              onClick={() => setCurrentPage(number)}
+              className={`px-3 py-1 border rounded transition ${
+                currentPage === number
+                  ? 'bg-black text-white'
+                  : 'hover:bg-gray-100'
+              }`}
+            >
+              {number}
+            </button>
+          ))}
+
+          {/* Next button */}
+          <button
+            onClick={() =>
+              setCurrentPage(prev =>
+                Math.min(prev + 1, totalPages)
+              )
+            }
+            className="px-3 py-1 border rounded hover:bg-gray-100 transition disabled:opacity-50"
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
+
+
+
       </div>
     </div>
   )
