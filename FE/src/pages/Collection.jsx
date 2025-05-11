@@ -45,7 +45,9 @@ const Collection = () => {
   
 
   const applyFilter = () => {
-    let productsCopy = products.slice()
+    setCurrentPage(1);
+    // xao tron san pham
+    let productsCopy = products.slice().sort(() => Math.random() - 0.5);
 
     if (showSearch && search) {
       productsCopy = productsCopy.filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
@@ -77,6 +79,7 @@ const Collection = () => {
     
 
     setFilterProducts(productsCopy)
+    // setCurrentPage(1);
   }
 
   const sortProduct = () => {
@@ -109,6 +112,10 @@ const Collection = () => {
   useEffect(() => {
     sortProduct();
   }, [sortType])
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -235,7 +242,7 @@ const Collection = () => {
         {/*Map products */}
         <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-2'>
           {currentProducts.map((item, index) => (
-            <div key={index} className="border-r border-gray-300 last:border-r-0">
+            <div key={index} className="border-r border-gray-300 ">
               <ProductItem
                 name={item.name}
                 id={item._id}
