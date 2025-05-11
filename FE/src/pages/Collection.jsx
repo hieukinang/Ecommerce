@@ -233,11 +233,19 @@ const Collection = () => {
         </div>
 
         {/*Map products */}
-        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap gay-y-6'>
+        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6'>
           {currentProducts.map((item, index) => (
-            <ProductItem key={index} name={item.name} id={item._id} price={item.price} images={item.images} />
+            <div key={index} className="border-r border-gray-300 last:border-r-0">
+              <ProductItem
+                name={item.name}
+                id={item._id}
+                price={item.price}
+                images={item.images}
+              />
+            </div>
           ))}
         </div>
+
           
         <div className="flex justify-center items-center mt-8 space-x-2 text-sm">
           {/* Previous button */}
@@ -254,11 +262,7 @@ const Collection = () => {
             <button
               key={number}
               onClick={() => setCurrentPage(number)}
-              className={`px-3 py-1 border rounded transition ${
-                currentPage === number
-                  ? 'bg-black text-white'
-                  : 'hover:bg-gray-100'
-              }`}
+              className={`px-3 py-1 border rounded transition ${currentPage === number ? 'bg-black text-white': 'hover:bg-gray-100'}`}
             >
               {number}
             </button>
@@ -277,8 +281,6 @@ const Collection = () => {
             Next
           </button>
         </div>
-
-
 
       </div>
     </div>
