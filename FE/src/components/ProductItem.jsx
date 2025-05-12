@@ -9,7 +9,7 @@ const ProductItem = ({ id, images, name, price }) => {
   const displayImage = Object.values(images || {})[0] || 'fallback.jpg';
 
   return (
-    <div className='flex flex-col p-3 border rounded shadow-sm hover:shadow-md transition-all h-full'>
+    <div className='flex flex-col p-3 border-0 rounded hover:shadow-md transition-all h-full'>
       <Link className='text-gray-700 cursor-pointer flex flex-col h-full' to={`/product/${id}`}>
         <div className='h-[180px] flex items-center justify-center overflow-hidden'>
           <img

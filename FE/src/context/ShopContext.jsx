@@ -19,27 +19,26 @@ const ShopContextProvider = (props) => {
     const [token, setToken] = useState('');
     const navigate = useNavigate();
 
-    const addToCart = async (itemId, brand) => {
-
-
-
+    const addToCart = async (itemId, brand, quantity = 1) => {
         let cartData = structuredClone(cartItems);
-
-        cartData[itemId] = (cartData[itemId] || 0) + 1;
-
+    
+        // Thêm đúng số lượng được chọn
+        cartData[itemId] = (cartData[itemId] || 0) + quantity;
+    
         setCartItems(cartData);
         console.log(cartData);
-
+    
         if (token) {
             try {
                 toast.success("Add to cart successfully");
-                await axios.post(`${backendUrl}/api/cart/add`, { itemId }, { headers: { token } });
+                await axios.post(`${backendUrl}/api/cart/add`, { itemId, quantity }, { headers: { token } });
             } catch (error) {
                 console.log(error);
                 toast.error(error.message);
             }
         }
-    }
+    };
+    
 
     const getCartCount = () => {
         let total = 0;

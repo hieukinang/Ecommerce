@@ -9,9 +9,13 @@ const Collection = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [filterProducts, setFilterProducts] = useState([]);
   const [category, setCategory] = useState([]);
-  const [subCategory, setSubCategory] = useState([]);
+  const [brand, setBrand] = useState([]);
   const [sortType, setSortType] = useState('relavent')
   const [suggestedProducts, setSuggestedProducts] = useState([])
+  const [priceRange, setPriceRange] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 20;
+
 
   const toggleCategory = (e) => {
     if (category.includes(e.target.value)) {
@@ -22,17 +26,28 @@ const Collection = () => {
     }
   }
 
-  const toggleSubCategory = (e) => {
-    if (subCategory.includes(e.target.value)) {
-      setSubCategory(prev => prev.filter(item => item !== e.target.value))
+  const toggleBrand = (e) => {
+    if (brand.includes(e.target.value)) {
+      setBrand(prev => prev.filter(item => item !== e.target.value));
+    } else {
+      setBrand(prev => [...prev, e.target.value]);
     }
-    else {
-      setSubCategory(prev => [...prev, e.target.value])
+  };
+
+  const togglePriceRange = (e) => {
+    const value = e.target.value;
+    if (priceRange.includes(value)) {
+      setPriceRange(prev => prev.filter(item => item !== value));
+    } else {
+      setPriceRange(prev => [...prev, value]);
     }
-  }
+  };
+  
 
   const applyFilter = () => {
-    let productsCopy = products.slice()
+    setCurrentPage(1);
+    // xao tron san pham
+    let productsCopy = products.slice().sort(() => Math.random() - 0.5);
 
     if (showSearch && search) {
       productsCopy = productsCopy.filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
@@ -42,11 +57,29 @@ const Collection = () => {
       productsCopy = productsCopy.filter(item => category.includes(item.category));
     }
 
-    if (subCategory.length > 0) {
-      productsCopy = productsCopy.filter(item => subCategory.includes(item.subCategory))
+    if (brand.length > 0) {
+      productsCopy = productsCopy.filter(item => brand.includes(item.brand));
     }
 
+    if (priceRange.length > 0) {
+      productsCopy = productsCopy.filter(item => {
+        return priceRange.some(range => {
+          const price = item.price;
+          if (range === 'Under 5 USD') return price < 5;
+          if (range === '5 USD - 30 USD') return price >= 5 && price < 30;
+          if (range === '30 USD - 70 USD') return price >= 30 && price < 70;
+          if (range === '70 USD - 100 USD') return price >= 70 && price < 100;
+          if (range === '100 USD - 150 USD') return price >= 100 && price < 150;
+          if (range === '150 USD - 200 USD') return price >= 150 && price < 200;
+          if (range === 'Above 200 USD') return price > 200;
+          return true;
+        });
+      });
+    }
+    
+
     setFilterProducts(productsCopy)
+    // setCurrentPage(1);
   }
 
   const sortProduct = () => {
@@ -68,11 +101,40 @@ const Collection = () => {
 
   useEffect(() => {
     applyFilter()
-  }, [category, subCategory, search, showSearch, products])
+  }, [category, brand, priceRange, search, showSearch, products])
+  
+  
+//   useEffect(() => {
+//   console.log("🔍 Danh sách sản phẩm:", products);
+// }, [products]);
+
 
   useEffect(() => {
     sortProduct();
   }, [sortType])
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filterProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(filterProducts.length / productsPerPage);
+  // Tính khoảng hiển thị cho pagination
+  const visiblePageCount = 5;
+  let startPage = Math.max(currentPage - Math.floor(visiblePageCount / 2), 1);
+  let endPage = startPage + visiblePageCount - 1;
+
+  if (endPage > totalPages) {
+    endPage = totalPages;
+    startPage = Math.max(endPage - visiblePageCount + 1, 1);
+  }  
+
+  const pageNumbers = [];
+  for (let i = startPage; i <= endPage; i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <div className='flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t'>
@@ -89,7 +151,7 @@ const Collection = () => {
           <p className='mb-3 text-sm font-medium'>PRODUCT CATEGORIES</p>
           <div className='flex flex-col gap-2 text-sm font-light text-gray-700'>
             <p className='flex gap-2'>
-              <input className='w-3' type='checkbox' value={'Lipstick'} onChange={toggleCategory} />Lipstick
+              <input className='w-3' type='checkbox' value={'Lifstick'} onChange={toggleCategory} />Lipstick
             </p>
 
             <p className='flex gap-2'>
@@ -101,7 +163,7 @@ const Collection = () => {
             </p>
 
             <p className='flex gap-2'>
-              <input className='w-3' type='checkbox' value={'Skincare-Haircare'} onChange={toggleCategory} />Skincare - Haircare
+              <input className='w-3' type='checkbox' value={'Skincare - Haircare'} onChange={toggleCategory} />Skincare - Haircare
             </p>
           </div>
         </div>
@@ -127,7 +189,7 @@ const Collection = () => {
                   className='w-3'
                   type='checkbox'
                   value={brand}
-                  onChange={toggleSubCategory}
+                  onChange={toggleBrand}
                 />
                 {brand}
               </p>
@@ -143,19 +205,20 @@ const Collection = () => {
           <p className='mb-3 text-sm font-medium'>PRICE RANGE</p>
           <div className='flex flex-col gap-2 text-sm font-light text-gray-700'>
             {[
-              'Under 4.35 USD',
-              '4.35 USD - 8.70 USD',
-              '8.70 USD - 13.04 USD',
-              '13.04 USD - 21.74 USD',
-              '21.74 USD - 43.48 USD',
-              'Above 43.48 USD',
+              'Under 5 USD',
+              '5 USD - 30 USD',
+              '30 USD - 70 USD',
+              '70 USD - 100 USD',
+              '100 USD - 150 USD',
+              '150 USD - 200 USD',
+              'Above 200 USD',
             ].map((range, index) => (
               <p key={index} className='flex gap-2'>
                 <input
                   className='w-3'
                   type='checkbox'
                   value={range}
-                  onChange={toggleSubCategory}
+                  onChange={togglePriceRange}
                 />
                 {range}
               </p>
@@ -177,13 +240,55 @@ const Collection = () => {
         </div>
 
         {/*Map products */}
-        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap gay-y-6'>
-          {
-            filterProducts.map((item, index) => (
-              <ProductItem key={index} name={item.name} id={item._id} price={item.price} images={item.images} />
-            ))
-          }
+        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-2'>
+          {currentProducts.map((item, index) => (
+            <div key={index} className="border-r border-gray-300 ">
+              <ProductItem
+                name={item.name}
+                id={item._id}
+                price={item.price}
+                images={item.images}
+              />
+            </div>
+          ))}
         </div>
+
+          
+        <div className="flex justify-center items-center mt-8 space-x-2 text-sm">
+          {/* Previous button */}
+          <button
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            className="px-3 py-1 border rounded hover:bg-gray-100 transition disabled:opacity-50"
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+
+          {/* Page numbers */}
+          {pageNumbers.map((number) => (
+            <button
+              key={number}
+              onClick={() => setCurrentPage(number)}
+              className={`px-3 py-1 border rounded transition ${currentPage === number ? 'bg-black text-white': 'hover:bg-gray-100'}`}
+            >
+              {number}
+            </button>
+          ))}
+
+          {/* Next button */}
+          <button
+            onClick={() =>
+              setCurrentPage(prev =>
+                Math.min(prev + 1, totalPages)
+              )
+            }
+            className="px-3 py-1 border rounded hover:bg-gray-100 transition disabled:opacity-50"
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
+
       </div>
     </div>
   )

@@ -7,9 +7,28 @@ const LatestCollection = () => {
   const { products } = useContext(ShopContext);
   const [latestProducts, setLatestProducts] = useState([]);
 
+  // Hàm chọn ngẫu nhiên N phần tử từ mảng
+  const getRandomItems = (arr, count) => {
+    const shuffled = [...arr].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  };
+
   useEffect(() => {
-    // Lấy 10 sản phẩm mới nhất
-    setLatestProducts(products.slice(0, 10));
+    if (products.length > 0) {
+      const lipstick = products.filter(p => p.category === 'Lifstick');
+      const perfume = products.filter(p => p.category === 'Perfume');
+      const makeup = products.filter(p => p.category === 'Makeup');
+      const skincareHaircare = products.filter(p => p.category === 'Skincare - Haircare');
+
+      const selected = [
+        ...getRandomItems(lipstick, 4),
+        ...getRandomItems(perfume, 2),
+        ...getRandomItems(makeup, 2),
+        ...getRandomItems(skincareHaircare, 2),
+      ];
+
+      setLatestProducts(selected);
+    }
   }, [products]);
 
   return (
@@ -24,8 +43,8 @@ const LatestCollection = () => {
         </p>
       </div>
 
-      {/* Grid hiển thị sản phẩm */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+      {/* Hiển thị sản phẩm */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-y-2 gap-x-4">
         {latestProducts.map((item) => (
           <ProductItem 
             key={item._id} 
@@ -33,7 +52,6 @@ const LatestCollection = () => {
             images={item.images} 
             name={item.name} 
             price={item.price} 
-
           />
         ))}
       </div>

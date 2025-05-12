@@ -5,19 +5,17 @@ import { assets } from '../assets/assets';
 import RelatedProducts from '../components/RelatedProducts';
 
 const Product = () => {
-
   const { productId } = useParams();
   const { products, currency, addToCart } = useContext(ShopContext);
   const [productData, setProductData] = useState(false);
   const [images, setImages] = useState('');
-  const [size, setSize] = useState('');
+  const [quantity, setQuantity] = useState(1);  // Đặt số lượng mặc định là 1
 
   const fetchProductData = async () => {
     products.map((item) => {
       if (item._id === productId) {
         setProductData(item);
         setImages(item.images[0]);
-
         return null;
       }
     })
@@ -26,6 +24,13 @@ const Product = () => {
   useEffect(() => {
     fetchProductData();
   }, [productId])
+
+  const handleQuantityChange = (e) => {
+    const value = parseInt(e.target.value, 10);
+    if (value > 0) {
+      setQuantity(value);
+    }
+  };
 
   return productData ? (
     <div className='border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100'>
@@ -45,7 +50,7 @@ const Product = () => {
           </div>
         </div>
 
-        {/*Product Information */}
+        {/* Product Information */}
         <div className='flex-1'>
           <h1 className='font-medium text-2xl mt-2'>{productData.name}</h1>
           <div className='flex items-center gap-1 mt-2'>
@@ -57,9 +62,33 @@ const Product = () => {
             <p className='pl-2'>(122)</p>
           </div>
           <p className='mt-5 text-3xl font-medium'>{currency}{productData.price}</p>
-          <p className='mt-5 text-gray-500 md:w-4/5'>{productData.description}</p>
+          
+          {/* Đã di chuyển mô tả xuống dưới phần Description */}
+          <div className='flex items-center gap-4 mt-6'>
+            {/* Ô số lượng */}
+            <div className='flex items-center border rounded-lg overflow-hidden'>
+              {/* <label htmlFor='quantity' className='px-3 text-sm text-gray-600 bg-gray-100 border-r'>
+                Qty
+              </label> */}
+              <input
+                type='number'
+                id='quantity'
+                value={quantity}
+                onChange={handleQuantityChange}
+                min='1'
+                className='w-16 px-2 py-2 text-center focus:outline-none focus:ring-2 focus:ring-black'
+              />
+            </div>
 
-          <button onClick={() => addToCart(productData._id)} className='bg-black text-white px-8 py-3 text-sm active:bg-gray-700'>ADD TO CARD</button>
+            {/* Nút thêm vào giỏ */}
+            <button 
+              onClick={() => addToCart(productData._id, productData.brand, quantity)} 
+              className='bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 active:bg-gray-700 text-sm transition-colors'>
+              ADD TO CART
+            </button>
+          </div>
+
+
           <hr className='mt-8 sm:w-4/5' />
           <div className='text-sm text-gray-500 mt-5 flex flex-col gap-1'>
             <p>100 Origin product</p>
@@ -76,12 +105,11 @@ const Product = () => {
           <b className='border px-5 py-3 text-sm'> Review (122)</b>
         </div>
         <div className='flex flex-col gap-4 border px-6 py-6 text-sm text-gray-500'>
-          <p>An e-commerce website is an online platform that facilitates the buying and selling of products or services over the internet. It serves as a virtual marketplace where businesses and individuals can showcase their products, interact with customers, and conduct transactions without the need for a physical presence. E-commerce websites have gained immense popularity due to their convenience, accessibility, and the global reach they offer.</p>
-          <p>E-commerce websites typically display products or services along with detailed descriptions, images, prices, and any available variations (e.g., sizes, colors). Each product usually has its own dedicated page with relevant information.</p>
+          <p>{productData.description}</p> {/* Mô tả sản phẩm sẽ được hiển thị ở đây */}
         </div>
       </div>
 
-      {/**display related products */}
+      {/** Display related products */}
       <RelatedProducts category={productData.category} subCategory={productData.subCategory} />
 
     </div>
