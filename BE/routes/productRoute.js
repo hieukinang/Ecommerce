@@ -1,5 +1,5 @@
 import express from 'express'
-import {addProduct, listProducts, removeProduct, singleProduct} from '../controllers/productController.js'
+import {addProduct, listProducts, removeProduct, updateProduct, singleProduct} from '../controllers/productController.js'
 import upload from '../middleware/multer.js';
 import adminAuth from '../middleware/adminAuth.js'
 
@@ -9,6 +9,13 @@ productRoute.post('/add',adminAuth,upload.fields([{name:'image1',maxCount:1},{na
 productRoute.post('/remove', removeProduct);
 productRoute.post('/single', singleProduct);
 productRoute.get('/list', listProducts);
+productRoute.get('/:id', singleProduct); // Lấy thông tin sản phẩm
+productRoute.put('/update', adminAuth, upload.fields([
+  { name: 'image1', maxCount: 1 },
+  { name: 'image2', maxCount: 1 },
+  { name: 'image3', maxCount: 1 },
+  { name: 'image4', maxCount: 1 }
+]), updateProduct);
 
 export default productRoute;
 

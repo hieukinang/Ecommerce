@@ -47,42 +47,49 @@ const addProduct = async (req, res) => {
 // Hàm cập nhật sản phẩm
 const updateProduct = async (req, res) => {
   try {
+    console.log("Request body:", req.body);
+    console.log("Uploaded files:", req.files);
+
     const { id, name, description, price, category, brand, bestseller } = req.body;
-    const images = req.files;
 
-    const updateData = { name, description, price, category, brand, bestseller };
+    const existingProduct = await productModel.findById(id);
+    if (!existingProduct) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
 
-    if (images && Object.keys(images).length > 0) {
-      const uploadedImages = [];
-      for (const file of Object.values(images)) {
-        try {
-          const result = await cloudinary.uploader.upload(file[0].path, {
-            folder: "products",
-          });
-          uploadedImages.push(result.secure_url);
-          fs.unlinkSync(file[0].path); // Xóa file tạm
-        } catch (error) {
-          console.error("Error uploading image:", error);
-        }
+    let images = [...existingProduct.images];
+
+    if (req.files) {
+      if (req.files.image1) {
+        images[0] = `${req.protocol}://${req.get('host')}/${req.files.image1[0].path.replace(/\\/g, '/')}`;
       }
-      updateData.images = uploadedImages; // Cập nhật ảnh mới
-    } else {
-      // Nếu không có ảnh mới, giữ lại ảnh cũ
-      const existingProduct = await productModel.findById(id);
-      if (existingProduct) {
-        updateData.images = existingProduct.images;
+      if (req.files.image2) {
+        images[1] = `${req.protocol}://${req.get('host')}/${req.files.image2[0].path.replace(/\\/g, '/')}`;
+      }
+      if (req.files.image3) {
+        images[2] = `${req.protocol}://${req.get('host')}/${req.files.image3[0].path.replace(/\\/g, '/')}`;
+      }
+      if (req.files.image4) {
+        images[3] = `${req.protocol}://${req.get('host')}/${req.files.image4[0].path.replace(/\\/g, '/')}`;
       }
     }
 
-    const updatedProduct = await productModel.findByIdAndUpdate(id, updateData, { new: true });
-    if (!updatedProduct) {
-      return res.status(404).json({ success: false, message: "Product not found" });
-    }
+    if (!req.files.image1 && req.body.image1) images[0] = req.body.image1;
+    if (!req.files.image2 && req.body.image2) images[1] = req.body.image2;
+    if (!req.files.image3 && req.body.image3) images[2] = req.body.image3;
+    if (!req.files.image4 && req.body.image4) images[3] = req.body.image4;
 
-    res.json({ success: true, message: "Product updated successfully", product: updatedProduct });
+    const updatedProduct = await productModel.findByIdAndUpdate(
+      id,
+      { name, description, price, category, brand, bestseller, images },
+      { new: true }
+    );
+
+    console.log("Updated product:", updatedProduct);
+    res.json({ success: true, message: 'Product updated successfully', product: updatedProduct });
   } catch (error) {
-    console.error("Error updating product:", error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error("Error in updateProduct:", error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -116,6 +123,11 @@ const removeProduct = async (req, res) => {
 const singleProduct = async (req, res) => {
   try {
     const productId = req.params.id;
+    console.log("Product ID received in backend:", productId); // Log giá trị `id`
+
+    if (!productId || productId === "undefined") {
+      return res.status(400).json({ success: false, message: "Invalid product ID" });
+    }    
     const product = await productModel.findById(productId);
     if (!product) {
       return res.status(404).json({ success: false, message: "Product not found" });

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { backendUrl, currency } from '../App'
 import { toast } from 'react-toastify'
+import { Link } from 'react-router-dom';
 
 const List = ({ token }) => {
   const [list, setList] = useState([]);
@@ -9,7 +10,10 @@ const List = ({ token }) => {
 
   const fetchList = async () => {
     try {
-      const response = await axios.get(backendUrl + "/api/product/list");
+      const response = await axios.get(`${backendUrl}/api/product/list`, {
+        headers: { token }, // Đảm bảo token được truyền đúng
+      });
+      console.log("Products fetched from API:", response.data.products); // Log danh sách sản phẩm
       if (response.data.products) {
         setList(response.data.products);
       } else {
@@ -91,11 +95,13 @@ const List = ({ token }) => {
               >
                 View
               </button>
-              <button
+              <Link
+                to={`/edit/${item._id}`} // Sử dụng đúng trường `_id`
                 className="px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                onClick={() => console.log("Editing product with ID:", item._id)} // Log giá trị `_id`
               >
                 Edit
-              </button>
+              </Link>
               <button
                 onClick={() => removeProduct(item._id)}
                 className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
