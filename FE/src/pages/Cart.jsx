@@ -64,7 +64,7 @@ const Cart = () => {
                     updateQuantity(item._id, value);
                   }
                 }}
-                className='border max-w-10 sm:max-w-20 px-1 sm:px-2 py-1'
+                className='border rounded-full w-12 sm:w-14 px-1 py-1 text-center'
                 type='number'
                 min={1}
                 defaultValue={item.quantity}
@@ -87,7 +87,7 @@ const Cart = () => {
           <div className='w-full text-end'>
             <button
               onClick={() => navigate('/place-order')}
-              className='bg-black text-white text-sm my-8 px-8 py-3'
+              className='bg-black text-white text-sm my-8 px-8 py-3 rounded-full hover:bg-gray-800 transition-all duration-300 ease-in-out'
             >
               PROCEED TO CHECKOUT
             </button>
