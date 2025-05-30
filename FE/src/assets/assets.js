@@ -78,6 +78,8 @@ import cross_icon from './cross_icon.png'
 import baner10 from './baner10.jpg'
 import aboutus from './aboutus.jpg'
 import logohnt from './logohnt.jpg'
+import aboutuss from './aboutuss.jpg'
+import contact from './contact.png'
 
 export const assets = {
     logo,
@@ -101,8 +103,9 @@ export const assets = {
     cross_icon,
     i_img_dowload,
     baner10,
-    aboutus,
-    logohnt
+    aboutuss,
+    logohnt,
+    contact
 }
 
 export const products = [
