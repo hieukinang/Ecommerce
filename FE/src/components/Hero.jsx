@@ -8,12 +8,12 @@ const Hero = () => {
       {/* Ảnh nền */}
       <img
         className="w-full max-w-[1200px] h-auto object-cover"
-        src={assets.baner10}
-        alt="banner10"
+        src={assets.banerrealfinal}
+        alt="bannerrealfinal"
       />
 
       {/* Nội dung nằm trên ảnh */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col items-center justify-center text-white bg-black bg-opacity-30 w-full max-w-[1200px] h-full">
+      <div className="absolute top-0 right-0 flex flex-col items-end justify-center text-white bg-black bg-opacity-30 w-full max-w-[1200px] h-full pr-16">
         <div className="flex items-center justify-center gap-2 mb-2 mt-8">
           <p className="w-8 md:w-11 h-[2px] bg-white"></p>
           <p className="font-bold text-sm md:text-base">
@@ -22,9 +22,14 @@ const Hero = () => {
           <p className="w-8 md:w-11 h-[2px] bg-white"></p>
         </div>
 
-        <h1 className="font-bold prata-regular text-3xl sm:py-3 lg:text-5xl leading-relaxed text-center">
-          Mineral Based Makeup Products
-        </h1>
+        <div className="text-right leading-snug">
+          <h1 className="font-bold prata-regular text-4xl lg:text-6xl text-white">
+            Mineral Based
+          </h1>
+          <h2 className="font-semibold prata-regular text-3xl lg:text-5xl text-white mt-2">
+            Makeup Products
+          </h2>
+        </div>
 
         <NavLink
           to="/collection"
