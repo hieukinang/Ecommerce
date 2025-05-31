@@ -7,7 +7,13 @@ import { Link } from 'react-router-dom';
 const List = ({ token }) => {
   const [list, setList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-
+  // Bổ sung filter, sort, pagination
+  const [categoryFilter, setCategoryFilter] = useState('');
+  const [brandFilter, setBrandFilter] = useState('');
+  const [sortType, setSortType] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 10;
+  
   const fetchList = async () => {
     try {
       const response = await axios.get(`${backendUrl}/api/product/list`, {
@@ -49,24 +55,91 @@ const List = ({ token }) => {
     fetchList();
   }, []);
 
-  const filteredList = list.filter(
+
+  // Search nâng cao + filter
+  let filteredList = list.filter(
     (item) =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.category.toLowerCase().includes(searchTerm.toLowerCase())
+      (item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (item.brand && item.brand.toLowerCase().includes(searchTerm.toLowerCase()))
+      ) &&
+      (categoryFilter ? item.category === categoryFilter : true) &&
+      (brandFilter ? item.brand === brandFilter : true)
   );
+
+  // Sort
+  if (sortType === 'price-asc') {
+    filteredList = filteredList.slice().sort((a, b) => a.price - b.price);
+  } else if (sortType === 'price-desc') {
+    filteredList = filteredList.slice().sort((a, b) => b.price - a.price);
+  } else if (sortType === 'name-asc') {
+    filteredList = filteredList.slice().sort((a, b) => a.name.localeCompare(b.name));
+  } else if (sortType === 'name-desc') {
+    filteredList = filteredList.slice().sort((a, b) => b.name.localeCompare(a.name));
+  }
+
+  // Pagination
+  const totalPages = Math.ceil(filteredList.length / productsPerPage);
+  const paginatedList = filteredList.slice(
+    (currentPage - 1) * productsPerPage,
+    currentPage * productsPerPage
+  );
+
+  // Reset page về 1 khi filter/search/sort thay đổi
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, categoryFilter, brandFilter, sortType]);
+
+  // Lấy danh sách brand/category từ dữ liệu
+  const allCategories = Array.from(new Set(list.map(item => item.category)));
+  const allBrands = Array.from(new Set(list.map(item => item.brand)));
+
 
   return (
     <div>
       <p className='mb-2 text-xl font-bold'>All Products List</p>
 
-      {/* Search bar */}
-      <input
-        type="text"
-        placeholder="Search by name or category..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="border p-2 mb-4 w-full md:w-1/2 rounded"
-      />
+      {/* Search, Filter, Sort */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        <input
+          type="text"
+          placeholder="Search by name, category, brand..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border p-2 rounded"
+        />
+        <select
+          value={categoryFilter}
+          onChange={e => setCategoryFilter(e.target.value)}
+          className="border p-2 rounded"
+        >
+          <option value="">All Categories</option>
+          {allCategories.map((cat, idx) => (
+            <option key={idx} value={cat}>{cat}</option>
+          ))}
+        </select>
+        <select
+          value={brandFilter}
+          onChange={e => setBrandFilter(e.target.value)}
+          className="border p-2 rounded"
+        >
+          <option value="">All Brands</option>
+          {allBrands.map((brand, idx) => (
+            <option key={idx} value={brand}>{brand}</option>
+          ))}
+        </select>
+        <select
+          value={sortType}
+          onChange={e => setSortType(e.target.value)}
+          className="border p-2 rounded"
+        >
+          <option value="">Sort</option>
+          <option value="price-asc">Price ↑</option>
+          <option value="price-desc">Price ↓</option>
+          <option value="name-asc">Name A-Z</option>
+          <option value="name-desc">Name Z-A</option>
+        </select>
+      </div>
 
       <div className='flex flex-col gap-2'>
 
@@ -80,7 +153,7 @@ const List = ({ token }) => {
         </div>
 
         {/* Product List */}
-        {filteredList.map((item, index) => (
+        {paginatedList.map((item, index) => (
           <div
             className='grid grid-cols-[1fr_3fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_2fr] items-center gap-2 py-1 px-2 border text-sm'
             key={index}
@@ -110,6 +183,17 @@ const List = ({ token }) => {
               </button>
             </div>
           </div>
+        ))}
+      </div>
+
+      {/* Pagination */}
+      <div className="flex gap-2 mt-4 flex-wrap">
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i}
+            className={`px-3 py-1 rounded ${currentPage === i + 1 ? 'bg-black text-white' : 'bg-gray-200'}`}
+            onClick={() => setCurrentPage(i + 1)}
+          >{i + 1}</button>
         ))}
       </div>
     </div>
