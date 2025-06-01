@@ -145,7 +145,7 @@ const Collection = () => {
         </p>
         {/* Category Filter */}
         <div
-          className={`border border-gray-300 pl-5 py-3 my-5 ${showFilter ? '' : 'hidden'
+          className={`border-b border-gray-300 pl-5 py-3 my-5 ${showFilter ? '' : 'hidden'
             } sm:block`}
         >
           <p className='mb-3 text-sm font-medium'>PRODUCT CATEGORIES</p>
@@ -170,7 +170,7 @@ const Collection = () => {
 
         {/* Brand Filter */}
         <div
-          className={`border border-gray-300 pl-5 py-3 mt-6 ${showFilter ? '' : 'hidden'
+          className={`border-b border-gray-300 pl-5 py-3 mt-6 ${showFilter ? '' : 'hidden'
             } sm:block`}
         >
           <p className='mb-3 text-sm font-medium'>BRAND</p>
@@ -199,7 +199,7 @@ const Collection = () => {
 
         {/* Price Range Filter */}
         <div
-          className={`border border-gray-300 pl-5 py-3 mt-6 ${showFilter ? '' : 'hidden'
+          className={`border-b border-gray-300 pl-5 py-3 mt-6 ${showFilter ? '' : 'hidden'
             } sm:block`}
         >
           <p className='mb-3 text-sm font-medium'>PRICE RANGE</p>

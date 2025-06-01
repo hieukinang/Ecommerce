@@ -32,8 +32,8 @@ const Hero = () => {
         </div>
 
         <NavLink
-          // to="/collection"
-          className="inline-block mt-4 px-6 py-2 border border-white text-sm font-medium tracking-wide transition duration-300 text-white hover:bg-white hover:text-black"
+          to="/collection"
+          className="inline-block mt-4 px-6 py-2 border border-white text-sm font-medium tracking-wide transition duration-300 text-white hover:bg-white hover:text-black translate-x-[-3.5cm]"
           style={{ marginLeft: '4cm' }}
         >
           SHOP NOW &gt;
