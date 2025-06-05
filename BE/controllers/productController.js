@@ -57,8 +57,8 @@ const updateProduct = async (req, res) => {
       return res.status(404).json({ success: false, message: "Product not found" });
     }
 
-    // Tạo mảng ảnh mới, mặc định là ảnh cũ
-    let newImages = [...existingProduct.images];
+    // Luôn đảm bảo mảng ảnh có 4 phần tử
+    let newImages = [...existingProduct.images, '', '', '', ''].slice(0, 4);
 
     // Nếu có ảnh mới upload, cập nhật đúng vị trí
     if (images && Object.keys(images).length > 0) {
