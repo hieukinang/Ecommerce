@@ -217,13 +217,30 @@ const Orders = ({ token }) => {
       </div>
       {/* Pagination */}
       <div className="flex gap-2 mt-4 flex-wrap">
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i}
-            className={`px-3 py-1 rounded ${currentPage === i + 1 ? 'bg-black text-white' : 'bg-gray-200'}`}
-            onClick={() => setCurrentPage(i + 1)}
-          >{i + 1}</button>
-        ))}
+        {Array.from({ length: totalPages }, (_, i) => i + 1)
+          .filter(page =>
+            page === 1 ||
+            page === totalPages ||
+            (page >= currentPage - 1 && page <= currentPage + 1)
+          )
+          .reduce((acc, page, idx, arr) => {
+            if (idx > 0 && page - arr[idx - 1] > 1) acc.push('...');
+            acc.push(page);
+            return acc;
+          }, [])
+          .map((page, idx) =>
+            page === '...' ? (
+              <span key={`ellipsis-${idx}`} className="px-3 py-1">...</span>
+            ) : (
+              <button
+                key={`page-${page}-${idx}`}
+                className={`px-3 py-1 rounded ${currentPage === page ? 'bg-black text-white' : 'bg-gray-200'}`}
+                onClick={() => setCurrentPage(page)}
+              >
+                {page}
+              </button>
+            )
+          )}
       </div>
     </div>
   );
