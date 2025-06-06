@@ -124,12 +124,12 @@ const Orders = ({ token }) => {
 
   return (
     <div>
-      <h3 className="text-xl font-bold mb-2">Order Page</h3>
+      <h3 className="text-xl font-bold mb-2">Quản lý đơn hàng</h3>
       {/* Search, Filter, Sort */}
       <div className="flex flex-wrap gap-2 mb-4">
         <input
           type="text"
-          placeholder="Search by name, address, phone, status..."
+          placeholder="Tìm kiếm theo tên, địa chỉ, SĐT, trạng thái..."
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
           className="border p-2 rounded"
@@ -139,28 +139,28 @@ const Orders = ({ token }) => {
           onChange={e => setStatusFilter(e.target.value)}
           className="border p-2 rounded"
         >
-          <option value="">All Status</option>
-          <option value="Order Placed">Order Placed</option>
-          <option value="Packing">Packing</option>
-          <option value="Shipped">Shipped</option>
-          <option value="Out for delivery">Out for delivery</option>
-          <option value="Delivered">Delivered</option>
+          <option value="">Tất cả trạng thái</option>
+          <option value="Order Placed">Đã đặt hàng</option>
+          <option value="Packing">Đang đóng gói</option>
+          <option value="Shipped">Đã gửi hàng</option>
+          <option value="Out for delivery">Đang giao hàng</option>
+          <option value="Delivered">Đã giao</option>
         </select>
         <select
           value={sortType}
           onChange={e => setSortType(e.target.value)}
           className="border p-2 rounded"
         >
-          <option value="">Sort</option>
-          <option value="date-desc">Newest</option>
-          <option value="date-asc">Oldest</option>
-          <option value="amount-desc">Total ↓</option>
-          <option value="amount-asc">Total ↑</option>
+          <option value="">Sắp xếp</option>
+          <option value="date-desc">Mới nhất</option>
+          <option value="date-asc">Cũ nhất</option>
+          <option value="amount-desc">Tổng tiền ↓</option>
+          <option value="amount-asc">Tổng tiền ↑</option>
         </select>
       </div>
       <div>
         {paginatedOrders.length === 0 && (
-          <div className="text-gray-500 italic mb-4">No orders found.</div>
+          <div className="text-gray-500 italic mb-4">Không tìm thấy đơn hàng.</div>
         )}
         {paginatedOrders.map((order, index) => (
           <div className="grid grid-cols-1 sm:grid-cols-[0.5fr_2fr_1fr] lg:grid-cols-[0.5fr_2fr_1fr_1fr_1fr] gap-3 items-start border-2 border-gray-200 p-5 md:p-8 my-3 md:my-4 text-xs sm:text-sm text-gray-700" key={index}>
@@ -199,18 +199,18 @@ const Orders = ({ token }) => {
               <p>{order.address.phone}</p>
             </div>
             <div >
-              <p className="text-sm sm:text-[15px]">Items: {order.items.length}</p>
-              <p className="mt-3">Method: {order.paymentMethod}</p>
-              <p>Payment: {order.payment ? 'Done' : 'Pending'}</p>
-              <p>Date: {new Date(order.date).toLocaleDateString()}</p>
+              <p className="text-sm sm:text-[15px]">Số sản phẩm: {order.items.length}</p>
+              <p className="mt-3">Phương thức: {order.paymentMethod}</p>
+              <p>Thanh toán: {order.payment ? 'Đã thanh toán' : 'Chưa thanh toán'}</p>
+              <p>Ngày đặt: {new Date(order.date).toLocaleDateString()}</p>
             </div>
             <p className="text-sm sm:text-[15px]">{currency} {order.amount}</p>
             <select onChange={(event)=>statusHandler(event, order._id)} value={order.status} className="p-2 font-semibold">
-              <option value="Order Placed">Order Placed</option>
-              <option value="Packing">Packing</option>
-              <option value="Shipped">Shipped</option>
-              <option value="Out for delivery">Out for delivery</option>
-              <option value="Delivered">Delivered</option>
+              <option value="Order Placed">Đã đặt hàng</option>
+              <option value="Packing">Đang đóng gói</option>
+              <option value="Shipped">Đã gửi hàng</option>
+              <option value="Out for delivery">Đang giao hàng</option>
+              <option value="Delivered">Đã giao</option>
             </select>
           </div>
         ))}

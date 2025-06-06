@@ -61,7 +61,7 @@ const Add = ({ token }) => {
 
   return (
     <form onSubmit={onSubmitHandler} className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-md">
-      <h1 className="text-2xl font-bold mb-4 text-gray-800">Add Product</h1>
+      <h1 className="text-2xl font-bold mb-4 text-gray-800">Thêm sản phẩm</h1>
       <div className="grid grid-cols-4 gap-4 mb-4">
         {[0, 1, 2, 3].map((index) => (
           <label key={index} className="cursor-pointer">
@@ -101,7 +101,7 @@ const Add = ({ token }) => {
                         d="M12 4v16m8-8H4"
                       />
                     </svg>
-                    <span className="text-sm">Upload</span>
+                    <span className="text-sm">Tải ảnh lên</span>
                   </div>
                 );
               })()}
@@ -111,18 +111,18 @@ const Add = ({ token }) => {
       </div>
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
-          <label className="block mb-1 text-gray-600 font-medium text-base">Product Name</label>
+          <label className="block mb-1 text-gray-600 font-medium text-base">Tên sản phẩm</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-pink-500 text-base"
-            placeholder="Type here"
+            placeholder="Nhập tên sản phẩm"
             required
           />
         </div>
         <div>
-          <label className="block mb-1 text-gray-600 font-medium text-base">Product Price</label>
+          <label className="block mb-1 text-gray-600 font-medium text-base">Giá sản phẩm</label>
           <input
             type="number"
             value={price}
@@ -135,20 +135,20 @@ const Add = ({ token }) => {
       </div>
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
-          <label className="block mb-1 text-gray-600 font-medium text-base">Product Category</label>
+          <label className="block mb-1 text-gray-600 font-medium text-base">Danh mục</label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-pink-500 text-base"
           >
-            <option value="Lipstick">Lipstick</option>
-            <option value="Perfume">Perfume</option>
-            <option value="Makeup">Makeup</option>
-            <option value="Skincare - Haircare">Skincare - Haircare</option>
+            <option value="Lipstick">Son môi</option>
+            <option value="Perfume">Nước hoa</option>
+            <option value="Makeup">Trang điểm</option>
+            <option value="Skincare - Haircare">Chăm sóc da - Tóc</option>
           </select>
         </div>
         <div>
-          <label className="block mb-1 text-gray-600 font-medium text-base">Brand</label>
+          <label className="block mb-1 text-gray-600 font-medium text-base">Thương hiệu</label>
           <select
             value={brand}
             onChange={(e) => setBrand(e.target.value)}
@@ -165,13 +165,13 @@ const Add = ({ token }) => {
         </div>
       </div>
       <div className="mb-4">
-        <label className="block mb-1 text-gray-600 font-medium text-base">Product Description</label>
+        <label className="block mb-1 text-gray-600 font-medium text-base">Mô tả sản phẩm</label>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-pink-500 text-base"
           rows="3"
-          placeholder="Write content here"
+          placeholder="Nhập mô tả sản phẩm"
           required
         ></textarea>
       </div>
@@ -183,13 +183,13 @@ const Add = ({ token }) => {
           className="w-5 h-5 text-pink-500 border-gray-300 rounded focus:ring-pink-500"
           id="bestseller"
         />
-        <label className="text-gray-600 font-medium text-base" htmlFor="bestseller">Add to bestseller</label>
+        <label className="text-gray-600 font-medium text-base" htmlFor="bestseller">Thêm vào mục bán chạy</label>
       </div>
       <button
         type="submit"
         className="w-full bg-black text-white py-3 rounded text-base hover:bg-gray-800 transition duration-300"
       >
-        ADD
+        Thêm sản phẩm
       </button>
     </form>
   )

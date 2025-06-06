@@ -97,13 +97,13 @@ const List = ({ token }) => {
 
   return (
     <div>
-      <p className='mb-2 text-xl font-bold'>All Products List</p>
+      <p className='mb-2 text-xl font-bold'>Danh sách sản phẩm</p>
 
       {/* Search, Filter, Sort */}
       <div className="flex flex-wrap gap-2 mb-4">
         <input
           type="text"
-          placeholder="Search by name, category, brand..."
+          placeholder="Tìm kiếm theo tên, danh mục, thương hiệu..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="border p-2 rounded"
@@ -113,7 +113,7 @@ const List = ({ token }) => {
           onChange={e => setCategoryFilter(e.target.value)}
           className="border p-2 rounded"
         >
-          <option value="">All Categories</option>
+          <option value="">Tất cả danh mục</option>
           {allCategories.map((cat, idx) => (
             <option key={idx} value={cat}>{cat}</option>
           ))}
@@ -123,7 +123,7 @@ const List = ({ token }) => {
           onChange={e => setBrandFilter(e.target.value)}
           className="border p-2 rounded"
         >
-          <option value="">All Brands</option>
+          <option value="">Tất cả thương hiệu</option>
           {allBrands.map((brand, idx) => (
             <option key={idx} value={brand}>{brand}</option>
           ))}
@@ -133,11 +133,11 @@ const List = ({ token }) => {
           onChange={e => setSortType(e.target.value)}
           className="border p-2 rounded"
         >
-          <option value="">Sort</option>
-          <option value="price-asc">Price ↑</option>
-          <option value="price-desc">Price ↓</option>
-          <option value="name-asc">Name A-Z</option>
-          <option value="name-desc">Name Z-A</option>
+          <option value="">Sắp xếp</option>
+          <option value="price-asc">Giá ↑</option>
+          <option value="price-desc">Giá ↓</option>
+          <option value="name-asc">Tên A-Z</option>
+          <option value="name-desc">Tên Z-A</option>
         </select>
       </div>
 
@@ -145,11 +145,11 @@ const List = ({ token }) => {
 
         {/* Header Row */}
         <div className="hidden md:grid grid-cols-[1fr_3fr_1fr_1fr_2fr] items-center py-1 px-2 border bg-gray-100 text-sm font-semibold">
-          <b>Image</b>
-          <b>Name</b>
-          <b>Category</b>
-          <b>Price</b>
-          <b className='text-center'>Action</b>
+          <b>Ảnh</b>
+          <b>Tên</b>
+          <b>Danh mục</b>
+          <b>Giá</b>
+          <b className='text-center'>Thao tác</b>
         </div>
 
         {/* Product List */}
@@ -163,23 +163,25 @@ const List = ({ token }) => {
             <p>{item.category}</p>
             <p>{currency}{item.price}</p>
             <div className="flex justify-end md:justify-center gap-2 text-sm">
+              {/*}
               <button
                 className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
               >
                 View
               </button>
+              */}
               <Link
                 to={`/edit/${item._id}`} // Sử dụng đúng trường `_id`
                 className="px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
                 onClick={() => console.log("Editing product with ID:", item._id)} // Log giá trị `_id`
               >
-                Edit
+                Sửa
               </Link>
               <button
                 onClick={() => removeProduct(item._id)}
                 className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
               >
-                Delete
+                Xóa
               </button>
             </div>
           </div>
