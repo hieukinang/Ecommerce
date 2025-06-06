@@ -33,7 +33,7 @@ const Cart = () => {
   return (
     <div className='border-t pt-14'>
       <div className='text-2xl mb-3'>
-        <Title text1={'YOUR'} text2={'CART'} />
+        <Title text1={'GIỎ HÀNG'} text2={'CỦA BẠN'} />
       </div>
 
       <div>
@@ -89,7 +89,7 @@ const Cart = () => {
               onClick={() => navigate('/place-order')}
               className='bg-black text-white text-sm my-8 px-8 py-3 rounded-full hover:bg-gray-800 transition-all duration-300 ease-in-out'
             >
-              PROCEED TO CHECKOUT
+              TIẾN HÀNH THANH TOÁN
             </button>
           </div>
         </div>
