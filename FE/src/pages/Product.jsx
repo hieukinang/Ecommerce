@@ -3,10 +3,11 @@ import { useParams } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext';
 import { assets } from '../assets/assets';
 import RelatedProducts from '../components/RelatedProducts';
+import { useNavigate } from 'react-router-dom'; 
 
 const Product = () => {
   const { productId } = useParams();
-  const { products, currency, addToCart } = useContext(ShopContext);
+  const { products, currency, addToCart, token, navigate } = useContext(ShopContext);
   const [productData, setProductData] = useState(false);
   const [images, setImages] = useState('');
   const [quantity, setQuantity] = useState(1);  // Đặt số lượng mặc định là 1
@@ -73,7 +74,13 @@ const Product = () => {
 
             {/* Nút thêm vào giỏ */}
             <button 
-              onClick={() => addToCart(productData._id, productData.brand, quantity)} 
+              onClick={() => {
+                if (!token) {
+                  navigate('/login');
+                } else {
+                  addToCart(productData._id, productData.brand, quantity);
+                }
+              }}
               className='bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 active:bg-gray-700 text-sm transition-colors'>
               THÊM VÀO GIỎ HÀNG
             </button>
