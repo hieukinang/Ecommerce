@@ -94,6 +94,12 @@ const List = ({ token }) => {
   const allCategories = Array.from(new Set(list.map(item => item.category)));
   const allBrands = Array.from(new Set(list.map(item => item.brand)));
 
+  const categoryVN = {
+    Lipstick: "Son môi",
+    Perfume: "Nước hoa",
+    Makeup: "Trang điểm",
+    "Skincare - Haircare": "Chăm sóc da - Tóc"
+  };
 
   return (
     <div>
@@ -160,7 +166,7 @@ const List = ({ token }) => {
           >
             <img className='w-12' src={item.images[0]} alt='' />
             <p>{item.name}</p>
-            <p>{item.category}</p>
+            <p>{categoryVN[item.category] || item.category}</p>
             <p>{item.price.toLocaleString()} {currency}</p>
             <div className="flex justify-end md:justify-center gap-2 text-sm">
               {/*}
