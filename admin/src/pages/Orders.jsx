@@ -140,11 +140,11 @@ const Orders = ({ token }) => {
           className="border p-2 rounded"
         >
           <option value="">Tất cả trạng thái</option>
-          <option value="Order Placed">Đã đặt hàng</option>
-          <option value="Packing">Đang đóng gói</option>
-          <option value="Shipped">Đã gửi hàng</option>
-          <option value="Out for delivery">Đang giao hàng</option>
-          <option value="Delivered">Đã giao</option>
+          <option value="Đã đặt hàng">Đã đặt hàng</option>
+          <option value="Đang đóng gói">Đang đóng gói</option>
+          <option value="Đã gửi hàng">Đã gửi hàng</option>
+          <option value="Đang giao hàng">Đang giao hàng</option>
+          <option value="Đã giao">Đã giao</option>
         </select>
         <select
           value={sortType}
