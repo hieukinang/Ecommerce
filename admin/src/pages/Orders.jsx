@@ -204,7 +204,7 @@ const Orders = ({ token }) => {
               <p>Thanh toán: {order.payment ? 'Đã thanh toán' : 'Chưa thanh toán'}</p>
               <p>Ngày đặt: {new Date(order.date).toLocaleDateString()}</p>
             </div>
-            <p className="text-sm sm:text-[15px]">{currency} {order.amount}</p>
+            <p className="text-sm sm:text-[15px]">{order.amount.toLocaleString()} {currency}</p>
             <select onChange={(event)=>statusHandler(event, order._id)} value={order.status} className="p-2 font-semibold">
               <option value="Đã đặt hàng">Đã đặt hàng</option>
               <option value="Đang đóng gói">Đang đóng gói</option>
