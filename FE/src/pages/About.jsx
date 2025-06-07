@@ -28,15 +28,15 @@ const About = () => {
             </div>
 
             <div className="flex flex-col md:flex-row text-sm mb-20">
-                <div className="border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5">
+                <div className="md:px-16 py-8 sm:py-20 flex flex-col gap-5">
                     <b>Thương Hiệu Quốc Tế Chính Hãng</b>
                     <p className="text-gray-600">Chúng tôi chỉ hợp tác với các nhà cung cấp và nhà phân phối được ủy quyền, cam kết 100% sản phẩm chính hãng.</p>
                 </div>
-                <div className="border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5">
+                <div className="md:px-16 py-8 sm:py-20 flex flex-col gap-5">
                     <b>Trải Nghiệm Mua Sắm Đẳng Cấp</b>
                     <p className="text-gray-600">Từ giao diện mua sắm mượt mà đến đóng gói sang trọng, chúng tôi mang đến cho bạn cảm giác như đang bước vào một cửa hàng cao cấp ngay tại nhà.</p>
                 </div>
-                <div className="border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5">
+                <div className="md:px-16 py-8 sm:py-20 flex flex-col gap-5">
                     <b>Đội Ngũ Chuyên Gia Làm Đẹp</b>
                     <p className="text-gray-600">Đội ngũ tư vấn chuyên nghiệp luôn sẵn sàng hỗ trợ bạn với lời khuyên cá nhân hóa và dịch vụ tận tâm, nhanh chóng.</p>
                 </div>
