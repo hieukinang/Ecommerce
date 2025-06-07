@@ -121,7 +121,7 @@ const List = ({ token }) => {
         >
           <option value="">Tất cả danh mục</option>
           {allCategories.map((cat, idx) => (
-            <option key={idx} value={cat}>{cat}</option>
+            <option key={idx} value={cat}>{categoryVN[cat] || cat}</option>
           ))}
         </select>
         <select
