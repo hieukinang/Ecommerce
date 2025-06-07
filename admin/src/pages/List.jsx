@@ -13,7 +13,7 @@ const List = ({ token }) => {
   const [sortType, setSortType] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 10;
-  
+
   const fetchList = async () => {
     try {
       const response = await axios.get(`${backendUrl}/api/product/list`, {
