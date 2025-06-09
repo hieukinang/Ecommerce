@@ -59,7 +59,7 @@ const Order = () => {
                 <div>
                   <p className='sm:text-base font-medium'>{item.name}</p>
                   <div className='flex items-center gap-3 mt-2 text-base text-gray-700'>
-                    <p>{currency}{item.price}</p>
+                    <p>{item.price.toLocaleString('vi-VN') + 'đ'}</p>
                     <p>Số lượng: {item.quantity}</p>
                     <p>Thương hiệu: {item.brand}</p>
                   </div>
